@@ -136,8 +136,9 @@ export class Director{
       this.id = requestAnimationFrame(() => this.run());
       }else{
         let t = new Tool();
-        // t.voice("./audio/boom.mp3").play();
         t.zhendong();
+        // t.voice("./audio/boom.mp3",false).play();
+        
         //游戏结束,停止循环渲染
         cancelAnimationFrame(this.id);
         //游戏结束重新渲染一次(避免安卓贴图出错))

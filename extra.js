@@ -12,7 +12,7 @@ export class Tool{
     })        
   }
   //播放音乐
-  playMusic(src,loop){
+  voice(src,loop){
     //创建音频
     const music = wx.createInnerAudioContext();
     //音频文件路径

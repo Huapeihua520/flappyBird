@@ -40,7 +40,7 @@ export class Main{
     this.dataStore.ctx = this.ctx;
     this.dataStore.res = map;
     const t = new Tool();
-    // t.voice("./audio/bgm.mp3").play();
+    // t.voice("./audio/bgm.mp3",true).play();
     t.getTelInfo();
     t.getUserInfo();
     this.init();
