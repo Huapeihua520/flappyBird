@@ -1,3 +1,5 @@
+import { DataStore } from "./js/base/DataStore.js";
+
 //微信部分API的使用
 export class Tool{
   constructor(){
@@ -29,7 +31,7 @@ export class Tool{
     })
   }
   //获取用户信息
-  getUserInfo(){
+  getUserInfo(callback){
     //创建用户信息按钮
     const button = wx.createUserInfoButton({
       type:"text",
@@ -53,10 +55,72 @@ export class Tool{
     button.onTap(res => {
       if(res.userInfo){
         //用户授权了
-        console.log(res.userInfo);
+        // console.log(res.userInfo);
+        callback();
         //销毁按钮
         button.destroy();
       }
     });
+  }
+
+  //向服务器发送http请求
+  send(){
+    wx.request({
+      url: 'http://localhost:4000',
+      success(res){
+        console.log(res);
+      }
+    })
+  }
+  //发送socket数据
+  sendSocket(){
+    //1.建立连接
+    wx.connectSocket({
+      url: 'ws://localhost:4000',
+      success(res){
+        console.log("连接服务端socket成功");
+      },
+      fail(err){
+        console.log("连接失败");
+      }
+    });
+    //2.连接成功后,回调中可以发送数据
+    wx.onSocketOpen(function(){
+      //向后台发送数据
+      wx.sendSocketMessage({
+        data:"微信发送的数据",
+        success(){
+          console.log("微信发送数据成功");
+        }
+      });
+      //从后台接收数据
+      wx.onSocketMessage(function(res){
+        console.log(res);
+      })
+    })
+  }
+
+  //下载图片
+  downPic(){
+    wx.downloadFile({
+      url:"http://up.enterdesk.com/edpic/a1/64/48/a16448b674e53dc0d3f8444c6eaf4555.jpg",
+      success(res){
+        console.log(res);
+        //显示在手机屏幕上
+        // let img = wx.createImage();
+        // img.src = res.tempFilePath;
+        // img.onload = () => {
+        //   DataStore.getInstance().ctx.drawImage(img,0,0,img.width,img.height,0,0,img.width,img.height);
+        // }
+        //保存到手机相册
+
+        //下载在线音乐并播放
+        // let path = res.tempFilePath; //获取下载音乐的地址
+        // //播放音乐
+        // let ctx = wx.createInnerAudioContext();
+        // ctx.src = path;
+        // ctx.autoplay = true;
+      }
+    })
   }
 }
